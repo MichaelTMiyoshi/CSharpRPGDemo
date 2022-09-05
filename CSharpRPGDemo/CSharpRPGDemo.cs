@@ -108,10 +108,15 @@ namespace CSharpRPGDemo
                 if (location == 0)
                 {
                     location = Room0(location, ref P);
+                    if (P.Dead())
+                    {
+                        exit = true;
+                    } 
                 }
-                if (location == 1)
+                else if (location == 1)
                 {
                     location = Room1(location, ref P, ref timesThrough);
+
                 }
                 else if (location == 2)
                 {
@@ -146,6 +151,20 @@ namespace CSharpRPGDemo
         {
             char choice;
             Console.WriteLine("This is room " + location);
+            NPC npc = new NPC();
+            Console.WriteLine("You met " + npc.Name);
+            Console.WriteLine("You must defeat " + npc.Name + " to continue.");
+            bool win = false;
+            do
+            {
+                win = Conflict(ref P, ref npc);
+                Console.WriteLine(P);
+                Console.WriteLine(npc);
+            } while (!win && !npc.Dead());
+            if (P.Dead())
+            {
+                return location;
+            }
             Console.Write("Would you like to go to the second room? (Y/N) >> ");
             choice = Char.ToUpper(Convert.ToChar(Console.ReadLine()));
             if (choice == 'Y')
@@ -212,6 +231,22 @@ namespace CSharpRPGDemo
                 P.TakeDamage(3);
             }
             return P;
+        }
+
+        static bool Conflict(ref Player P, ref NPC npc)
+        {
+            Random rng = new Random();
+            P.TakeDamage(rng.Next(3));
+            npc.TakeDamage(rng.Next(1, 4));
+
+            if(P.Dead() || npc.Dead())
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

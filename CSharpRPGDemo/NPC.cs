@@ -16,7 +16,7 @@ namespace CSharpRPGDemo
         public NPC()
         {
             Random rng = new Random();
-            Name = "";
+            Name = "Bozo";
             Health = rng.Next(5, 11);
             Damage = rng.Next(5, 11);
             Race = (Races)rng.Next(4);
@@ -33,5 +33,23 @@ namespace CSharpRPGDemo
             Health -= lower;
             return Health;
         }
+        public bool Dead()
+        {
+            if (Health <= 0)
+            {
+                Health = 0;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        public override string ToString()
+        {
+            return Name + ", your stats:\n\tHealth: " + Health
+                + "\n\tDamage: " + Damage;
+        }
+
     }
 }
