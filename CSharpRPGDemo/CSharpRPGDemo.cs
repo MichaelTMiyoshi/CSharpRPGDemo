@@ -12,6 +12,9 @@
  *              -- GS 06-06 --
  *              Create functions for movement, rooms, fighting, etc.
  *              (Only really for the rooms, intro, checking health.)
+ *              -- GS 07-06 --
+ *              enum and classes added
+ *              Non-Player Character (NPC) class added.
  *  Notes:      The different parts of the RPG will be 
  *              in different branches on GitHub
  *  Maintenance Log:
@@ -42,7 +45,7 @@ namespace CSharpRPGDemo
             String name = Console.ReadLine();
             bool ready = false;
             int equipment = 0;
-            String equipmentName = "";
+            //String equipmentName = "";
 
             // equip loop
             do
@@ -77,8 +80,8 @@ namespace CSharpRPGDemo
 
                 if(equipment != 0)
                 {
-                    equipmentName = SetEquipmentName(equipment);
-                    Console.WriteLine("A " + equipmentName + " is a great choice");
+                    //equipmentName = SetEquipmentName(equipment);
+                    Console.WriteLine("A " + (Player.Equipment)equipment + " is a great choice");
                 }
                 if (!ready) { continue; }
 
@@ -92,7 +95,8 @@ namespace CSharpRPGDemo
                 }
             } while (!ready);
 
-            ShowStats(name, health, damage, equipmentName);
+            Player P = new Player(name, health, damage, (Player.Equipment) equipment);
+            P.ShowStats();
 
             bool exit = false;
             int location = 0;
@@ -107,13 +111,13 @@ namespace CSharpRPGDemo
                 }
                 if (location == 1)
                 {
-                    location = Room1(location, ref equipment, equipmentName, ref timesThrough);
-                    equipmentName = SetEquipmentName(equipment);
+//                    location = Room1(location, ref equipment, equipmentName, ref timesThrough);
+//                    equipmentName = SetEquipmentName(equipment);
                 }
                 else if (location == 2)
                 {
                     Console.WriteLine("This is room " + location);
-                    health = Room2(health, equipment, equipmentName);
+//                    health = Room2(health, equipment, equipmentName);
                     if (TestHealth(ref health) && equipment != 1)
                     {
                         Console.WriteLine("You must go back to the first room to study harder.");
@@ -124,10 +128,12 @@ namespace CSharpRPGDemo
                         exit = true;
                     }
                 }
-                ShowStats(name, health, damage, equipmentName);
+                Console.WriteLine(P);
+//                ShowStats(name, health, damage, equipmentName);
             } while (!exit);
             Console.WriteLine("Final Stats:\n");
-            ShowStats(name, health, damage, equipmentName);
+            Console.WriteLine(P);
+//            ShowStats(name, health, damage, equipmentName);
             if (TestHealth(ref health))
             {
                 Console.WriteLine("Way to go!  You passed all the competency tests!");
