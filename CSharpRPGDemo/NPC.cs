@@ -28,5 +28,10 @@ namespace CSharpRPGDemo
             Damage = damage;
             Race = race;
         }
+        public int TakeDamage(int lower)
+        {
+            Health -= lower;
+            return Health;
+        }
     }
 }

@@ -34,12 +34,18 @@ namespace CSharpRPGDemo
             if (Health <= 0)
             {
                 Health = 0;
-                return false;
+                return true;
             }
             else
             {
-                return true;
+                return false;
             }
+        }
+
+        public int TakeDamage(int lower)
+        {
+            Health -= lower;
+            return Health;
         }
         public void ShowStats()
         {

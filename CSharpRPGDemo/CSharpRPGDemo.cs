@@ -107,18 +107,18 @@ namespace CSharpRPGDemo
                 //char choice;
                 if (location == 0)
                 {
-                    location = Room0(location, ref health);
+                    location = Room0(location, ref P);
                 }
                 if (location == 1)
                 {
-//                    location = Room1(location, ref equipment, equipmentName, ref timesThrough);
-//                    equipmentName = SetEquipmentName(equipment);
+                    location = Room1(location, ref P, ref timesThrough);
                 }
                 else if (location == 2)
                 {
                     Console.WriteLine("This is room " + location);
-//                    health = Room2(health, equipment, equipmentName);
-                    if (TestHealth(ref health) && equipment != 1)
+                    P = Room2(P);
+                    Console.WriteLine(P.Dead() + "Equip: " + P.E);
+                    if (!P.Dead() && P.E != Player.Equipment.pencil)
                     {
                         Console.WriteLine("You must go back to the first room to study harder.");
                         location = 0;
@@ -129,61 +129,20 @@ namespace CSharpRPGDemo
                     }
                 }
                 Console.WriteLine(P);
-//                ShowStats(name, health, damage, equipmentName);
             } while (!exit);
             Console.WriteLine("Final Stats:\n");
             Console.WriteLine(P);
-//            ShowStats(name, health, damage, equipmentName);
-            if (TestHealth(ref health))
+            if (!P.Dead())
             {
                 Console.WriteLine("Way to go!  You passed all the competency tests!");
             }
             else
             {
-                Console.WriteLine("Better luck next time.");
+                Console.WriteLine("You need to study more.  Better luck next time.");
             }
         }
-        
-        static void ShowStats(String name, int health, int damage, String equipmentName)
-        {
-            Console.WriteLine("Your stats so far:");
-            Console.WriteLine(name);
-            Console.WriteLine("Health: " + health);
-            Console.WriteLine("Damage: " + damage);
-        }
-
-        static String SetEquipmentName(int equipment)
-        {
-            switch (equipment)
-            {
-                case 1:
-                    return "pencil";
-                    break;
-                case 2:
-                    return "laptop computer";
-                    break;
-                case 3:
-                    return "book of matches";
-                    break;
-            }
-            return "";
-        }
-
-        static bool TestHealth(ref int health)
-        {
-            if (health <= 0)
-            {
-                Console.WriteLine("You lose!");
-                health = 0;
-                return false;
-            }
-            else
-            {
-                return true;
-            }
-        }
-
-        static int Room0(int location, ref int health)
+ 
+        static int Room0(int location, ref Player P)
         {
             char choice;
             Console.WriteLine("This is room " + location);
@@ -193,27 +152,27 @@ namespace CSharpRPGDemo
             {
                 location = 1;
             }
-            else if (health < 10)
+            else if (P.Health < 10)
             {
-                health++;
+                P.Health++;
                 Console.WriteLine("You increased your health.");
             }
             return location;
         }
 
-        static int Room1(int location, ref int equipment, String equipmentName, ref int timesThrough)
+        static int Room1(int location, ref Player P, ref int timesThrough)
         {
             char choice;
             Console.WriteLine("This is room " + location);
-            if (equipment != 1)
+            if (P.E != Player.Equipment.pencil)
             {
                 Console.WriteLine("You found a pencil.");
-                Console.Write("Would you like to trade your " + equipmentName
+                Console.Write("Would you like to trade your " + P.E
                     + " for a pencil? (Y/N) >> ");
                 choice = Char.ToUpper(Convert.ToChar(Console.ReadLine()));
                 if (choice == 'Y')
                 {
-                    equipment = 1;
+                    P.E = Player.Equipment.pencil;
                 }
                 else
                 {
@@ -239,20 +198,20 @@ namespace CSharpRPGDemo
             return location;
         }
 
-        static int Room2(int health, int equipment, String equipmentName)
+        static Player Room2(Player P)
         {
-            Console.WriteLine("I see that you brought a " + equipmentName 
+            Console.WriteLine("I see that you brought a " + P.E 
                 + " to take your final competency test.");
-            if (equipment == 1)
+            if (P.E == Player.Equipment.pencil)
             {
                 Console.WriteLine("Very good.  You will need it to complete your task.");
             }
             else
             {
                 Console.WriteLine("Too bad.  You will need a pencil to complete your task.");
-                health -= 3;
+                P.TakeDamage(3);
             }
-            return health;
+            return P;
         }
     }
 }
