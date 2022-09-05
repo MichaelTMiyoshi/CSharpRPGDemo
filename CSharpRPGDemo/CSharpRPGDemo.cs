@@ -1,6 +1,7 @@
 ﻿/*  Name:       Miyoshi
  *  Problem:    RPG
- *  Pseudocode: Output introduction to the screen
+ *  Pseudocode: -- GS 01-04 --
+ *              Output introduction to the screen
  *  Notes:      The different parts of the RPG will be 
  *              in different branches on GitHub
  *  Maintenance Log:
