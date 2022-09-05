@@ -1,4 +1,14 @@
-﻿namespace CSharpRPGDemo
+﻿/*  Name:       Miyoshi
+ *  Problem:    RPG
+ *  Pseudocode: Output introduction to the screen
+ *  Notes:      The different parts of the RPG will be 
+ *              in different branches on GitHub
+ *  Maintenance Log:
+ *      Date:       Done:
+ *      09/05/2022  Introduction done
+ */
+using System;
+namespace CSharpRPGDemo
 {
     internal class CSharpRPGDemo
     {
