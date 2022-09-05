@@ -1,9 +1,12 @@
 ﻿/*  Name:       Miyoshi
  *  Problem:    RPG
- *  Pseudocode: Output introduction to the screen
+ *  Pseudocode: -- GS 01-04 --
+ *              Output introduction to the screen
+ *              -- GS 03-01 --
  *              Create Variables for health, damage, name
  *              Max and min for each
  *              Address user by name
+ *              -- GS 04-06 --
  *              Create equipment loop
  *              Create game loop
  *  Notes:      The different parts of the RPG will be 
