@@ -15,10 +15,9 @@ namespace CSharpRPGDemo
         public Equipment E { set; get; }
         public Player()
         {
-            Random rng = new Random();
             Name = "None";
-            Health = rng.Next(5, 11);
-            Damage = rng.Next(5, 11);
+            Health = CSharpRPGDemo.rng.Next(5, 11);
+            Damage = CSharpRPGDemo.rng.Next(5, 11);
             E = Equipment.none;
         }
         public Player(string name, int health, int damage, Equipment e)

@@ -15,11 +15,15 @@ namespace CSharpRPGDemo
         Races Race { set; get; }
         public NPC()
         {
-            Random rng = new Random();
             Name = "Bozo";
-            Health = rng.Next(5, 11);
-            Damage = rng.Next(5, 11);
-            Race = (Races)rng.Next(4);
+            Health = CSharpRPGDemo.rng.Next(5, 11);
+            Damage = CSharpRPGDemo.rng.Next(5, 11);
+            //Race = (Races)CSharpRPGDemo.rng.Next(4);
+            Race = (Races)CSharpRPGDemo.rng.Next(Enum.GetValues(typeof(Races)).Length);
+        }
+        public NPC(String name) : this()
+        {
+            Name = name;
         }
         public NPC(string name, int health, int damage, Races race)
         {

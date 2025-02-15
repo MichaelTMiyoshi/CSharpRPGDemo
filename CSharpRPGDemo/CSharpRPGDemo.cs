@@ -15,6 +15,10 @@
  *              -- GS 07-06 --
  *              enum and classes added
  *              Non-Player Character (NPC) class added.
+ *              -- Lists --
+ *              Lists added.
+ *              List of possible names for NPCs.
+ *              List of NPCs for the room.
  *  Notes:      The different parts of the RPG will be 
  *              in different branches on GitHub
  *  Maintenance Log:
@@ -23,12 +27,14 @@
  *      09/05/2022  Variables
  *      09/05/2022  Equipment loop and game loop added
  *                  Both loops and all the branching have error checking
+ *      02/15/2025  Added Lists to the game (as new branch of repo)
  */
 using System;
 namespace CSharpRPGDemo
 {
     internal class CSharpRPGDemo
     {
+        public static Random rng;   // one random number generator for the whole solution
         static void Main(string[] args)
         {
             Console.WriteLine("Welcome to the RPG demo solution!");
@@ -36,124 +42,147 @@ namespace CSharpRPGDemo
             Console.WriteLine("interacting with Non-Player Characters (NPCs).");
             Console.WriteLine("\n\nHave fun!");
 
-            Random rng = new Random();
+            rng = new Random();
+            List<String> npcPossibleNames = new List<String> { "Bozo", "Loki", "Pennywise", "Sideshow", "Norman",
+                                                               "Cruella", "Bellatrix", "Maleficent", "Joker"};
+
+            List<NPC> npcs = new List<NPC>();
+            for(int i = 0; i < npcPossibleNames.Count; i++)
+            {
+                NPC npc = new NPC(npcPossibleNames[i]);
+                npcs.Add(npc);
+            }
+
             int minStart = 5;
             int maxStart = 10;
             int health = minStart + rng.Next(maxStart + 1);
             int damage = rng.Next(minStart, maxStart + 1);
             Console.Write("What is your name? >> ");
             String name = Console.ReadLine();
-            bool ready = false;
-            int equipment = 0;
-            //String equipmentName = "";
+            bool tryAgain = true;
 
-            // equip loop
             do
             {
-                Console.WriteLine(name + ", you may choose one item.");
-                Console.WriteLine("\tA. Pencil");
-                Console.WriteLine("\tB. Laptop computer");
-                Console.WriteLine("\tC. Book of matches");
-                Console.Write("\t>> ");
-                char choice = Convert.ToChar(Console.ReadLine());
-                ready = true;
+                bool ready = false;
+                int equipment = 0;
+                //String equipmentName = "";
 
-                switch(choice)
+                // equip loop
+                do
                 {
-                    case 'A':
-                    case 'a':
-                        equipment = 1;
-                        break;
-                    case 'B':
-                    case 'b':
-                        equipment = 2;
-                        break;
-                    case 'C':
-                    case 'c':
-                        equipment = 3;
-                        break;
-                    default:
-                        Console.WriteLine("You must choose something.");
+                    Console.WriteLine(name + ", you may choose one item.");
+                    Console.WriteLine("\tA. Pencil");
+                    Console.WriteLine("\tB. Laptop computer");
+                    Console.WriteLine("\tC. Book of matches");
+                    Console.Write("\t>> ");
+                    char choice = Convert.ToChar(Console.ReadLine());
+                    ready = true;
+
+                    switch (choice)
+                    {
+                        case 'A':
+                        case 'a':
+                            equipment = 1;
+                            break;
+                        case 'B':
+                        case 'b':
+                            equipment = 2;
+                            break;
+                        case 'C':
+                        case 'c':
+                            equipment = 3;
+                            break;
+                        default:
+                            Console.WriteLine("You must choose something.");
+                            ready = false;
+                            break;
+                    }
+
+                    if (equipment != 0)
+                    {
+                        //equipmentName = SetEquipmentName(equipment);
+                        Console.WriteLine("A " + (Player.Equipment)equipment + " is a great choice");
+                    }
+                    if (!ready) { continue; }
+
+                    Console.Write("\n\nAre you ready to play the game? (Y/N) >> ");
+                    choice = Convert.ToChar(Console.ReadLine());    // access the first char
+                    choice = Char.ToUpper(choice);
+                    if (choice == 'N')
+                    {
                         ready = false;
-                        break;
-                }
-
-                if(equipment != 0)
-                {
-                    //equipmentName = SetEquipmentName(equipment);
-                    Console.WriteLine("A " + (Player.Equipment)equipment + " is a great choice");
-                }
-                if (!ready) { continue; }
-
-                Console.Write("\n\nAre you ready to play the game? (Y/N) >> ");
-                choice = Convert.ToChar(Console.ReadLine());
-                choice = Char.ToUpper(choice);
-                if(choice == 'N')
-                {
-                    ready = false;
-                    Console.WriteLine("Okay.  You may choose again.");
-                }
-            } while (!ready);
-
-            Player P = new Player(name, health, damage, (Player.Equipment) equipment);
-            P.ShowStats();
-
-            bool exit = false;
-            int location = 0;
-            int timesThrough = 0;
-
-            do
-            {
-                //char choice;
-                if (location == 0)
-                {
-                    location = Room0(location, ref P);
-                    if (P.Dead())
-                    {
-                        exit = true;
-                    } 
-                }
-                else if (location == 1)
-                {
-                    location = Room1(location, ref P, ref timesThrough);
-
-                }
-                else if (location == 2)
-                {
-                    Console.WriteLine("This is room " + location);
-                    P = Room2(P);
-                    Console.WriteLine(P.Dead() + "Equip: " + P.E);
-                    if (!P.Dead() && P.E != Player.Equipment.pencil)
-                    {
-                        Console.WriteLine("You must go back to the first room to study harder.");
-                        location = 0;
+                        Console.WriteLine("Okay.  You may choose again.");
                     }
-                    else
+                } while (!ready);
+
+                Player P = new Player(name, health, damage, (Player.Equipment)equipment);
+                P.ShowStats();
+
+                bool exit = false;
+                int location = 0;
+                int timesThrough = 0;
+
+                do
+                {
+                    //char choice;
+                    if (location == 0)
                     {
-                        exit = true;
+                        location = Room0(location, ref P, npcs[rng.Next(npcs.Count)]);
+                        if (P.Dead())
+                        {
+                            exit = true;
+                        }
                     }
-                }
+                    else if (location == 1)
+                    {
+                        location = Room1(location, ref P, ref timesThrough);
+
+                    }
+                    else if (location == 2)
+                    {
+                        Console.WriteLine("This is room " + location);
+                        P = Room2(P);
+                        //Console.WriteLine(P.Dead() + "Equip: " + P.E);    // debugging
+                        if (!P.Dead() && P.E != Player.Equipment.pencil)
+                        {
+                            Console.WriteLine("You must go back to the first room to study harder.");
+                            location = 0;
+                        }
+                        else
+                        {
+                            exit = true;
+                        }
+                    }
+                    Console.WriteLine(P);
+                } while (!exit);
+                Console.WriteLine("Final Stats:\n");
                 Console.WriteLine(P);
-            } while (!exit);
-            Console.WriteLine("Final Stats:\n");
-            Console.WriteLine(P);
-            if (!P.Dead())
-            {
-                Console.WriteLine("Way to go!  You passed all the competency tests!");
-            }
-            else
-            {
-                Console.WriteLine("You need to study more.  Better luck next time.");
-            }
+                if (!P.Dead())
+                {
+                    Console.WriteLine("Way to go!  You passed all the competency tests!");
+                }
+                else
+                {
+                    Console.WriteLine("You need to study more.  Better luck next time.");
+                }
+
+                Console.Write("Try again? (Y/N) >> ");
+                char yn = Console.ReadLine().ToUpper()[0];  // different way to access the first char
+                if(yn == 'N')
+                {
+                    tryAgain = false;
+                }
+            } while (tryAgain);
         }
- 
-        static int Room0(int location, ref Player P)
+
+        static int Room0(int location, ref Player P, NPC npc)
         {
             char choice;
             Console.WriteLine("This is room " + location);
-            NPC npc = new NPC();
             Console.WriteLine("You met " + npc.Name);
             Console.WriteLine("You must defeat " + npc.Name + " to continue.");
+            Console.WriteLine("Press <Enter> to fight " + npc.Name + " to the death.");
+            Console.ReadLine();
             bool win = false;
             do
             {
@@ -235,7 +264,6 @@ namespace CSharpRPGDemo
 
         static bool Conflict(ref Player P, ref NPC npc)
         {
-            Random rng = new Random();
             P.TakeDamage(rng.Next(3));
             npc.TakeDamage(rng.Next(1, 4));
 
