@@ -6,13 +6,15 @@ using System.Threading.Tasks;
 
 namespace CSharpRPGDemo
 {
-    internal class NPC
+    internal class NPC : Player
     {
         public enum Races { orc, elf, dwarf, human }
-        public String Name { set; get; }
-        public int Health { set; get; }
-        public int Damage { set; get; }
         public Races Race { set; get; } // needed to make this public when I wrote data to file
+
+        // Notice that the properties are not included in the child class.
+        // This is because they are inherited from the parent class.
+        // Equipment could also be used in this class.
+        // The equipment could also be used.  (And probably should be.)
         public NPC()
         {
             Name = "Bozo";
@@ -32,23 +34,26 @@ namespace CSharpRPGDemo
             Damage = damage;
             Race = race;
         }
-        public int TakeDamage(int lower)
-        {
-            Health -= lower;
-            return Health;
-        }
-        public bool Dead()
-        {
-            if (Health <= 0)
-            {
-                Health = 0;
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
+        // TakeDamaage() and Dead() are inherited from Player
+        // so they are not necessary in this child class.
+
+        //public int TakeDamage(int lower)
+        //{
+        //    Health -= lower;
+        //    return Health;
+        //}
+        //public bool Dead()
+        //{
+        //    if (Health <= 0)
+        //    {
+        //        Health = 0;
+        //        return true;
+        //    }
+        //    else
+        //    {
+        //        return false;
+        //    }
+        //}
         public override string ToString()
         {
             return Name + ", your stats:\n\tHealth: " + Health
