@@ -12,7 +12,7 @@ namespace CSharpRPGDemo
         public String Name { set; get; }
         public int Health { set; get; }
         public int Damage { set; get; }
-        Races Race { set; get; }
+        public Races Race { set; get; } // needed to make this public when I wrote data to file
         public NPC()
         {
             Name = "Bozo";

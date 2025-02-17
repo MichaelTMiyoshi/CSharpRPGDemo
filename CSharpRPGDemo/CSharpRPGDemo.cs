@@ -19,6 +19,9 @@
  *              Lists added.
  *              List of possible names for NPCs.
  *              List of NPCs for the room.
+ *              -- Files --
+ *              Read the NPCs from a file.
+ *              Write to the same file at the end if the user chooses.
  *  Notes:      The different parts of the RPG will be 
  *              in different branches on GitHub
  *  Maintenance Log:
@@ -28,6 +31,7 @@
  *      09/05/2022  Equipment loop and game loop added
  *                  Both loops and all the branching have error checking
  *      02/15/2025  Added Lists to the game (as new branch of repo)
+ *      02/17/2025  Added file reading and writing.
  */
 using System;
 namespace CSharpRPGDemo
@@ -45,14 +49,39 @@ namespace CSharpRPGDemo
             rng = new Random();
             List<String> npcPossibleNames = new List<String> { "Bozo", "Loki", "Pennywise", "Sideshow", "Norman",
                                                                "Cruella", "Bellatrix", "Maleficent", "Joker"};
-
+            
             List<NPC> npcs = new List<NPC>();
-            for(int i = 0; i < npcPossibleNames.Count; i++)
-            {
-                NPC npc = new NPC(npcPossibleNames[i]);
-                npcs.Add(npc);
-            }
 
+            // Set it up as defaulting to reading a file.
+            // Could add an if statement here and take the for loop out of the catch
+            // That would probably be the preferred method.
+            // If Data.txt does not exist, the random NPCs will be added instead.
+            // Remember to close the StreamReader and StreamWriter when finished.
+            try
+            {
+                StreamReader reader = new StreamReader("../../../Data.txt");
+
+                while (!reader.EndOfStream)
+                {
+                    String line = reader.ReadLine();
+                    String[] data = line.Split(',');
+                    String nName = data[0];
+                    int nHealth = Convert.ToInt32(data[1]);
+                    int nDamage = Convert.ToInt32(data[2]);
+                    NPC.Races nRace;
+                    Enum.TryParse(data[3], out nRace);
+                    npcs.Add(new NPC(nName, nHealth, nDamage, nRace));
+                }
+                reader.Close();
+            }
+            catch (Exception e)
+            {
+                for (int i = 0; i < npcPossibleNames.Count; i++)
+                {
+                    NPC npc = new NPC(npcPossibleNames[i]);
+                    npcs.Add(npc);
+                }
+            }
             int minStart = 5;
             int maxStart = 10;
             int health = minStart + rng.Next(maxStart + 1);
@@ -173,6 +202,18 @@ namespace CSharpRPGDemo
                     tryAgain = false;
                 }
             } while (tryAgain);
+
+            Console.Write("Save NPC data? (Y/N) >> ");
+            char ans = Console.ReadLine().ToUpper()[0];
+            if(ans != 'N')
+            {
+                StreamWriter write = new StreamWriter("../../../Data.txt");
+                for(int i = 0; i < npcs.Count; i++)
+                {
+                    write.WriteLine(npcs[i].Name + "," + npcs[i].Health + "," + npcs[i].Damage + "," + npcs[i].Race);
+                }
+                write.Close();
+            }
         }
 
         static int Room0(int location, ref Player P, NPC npc)

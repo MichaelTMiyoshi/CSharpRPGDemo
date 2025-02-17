@@ -1,0 +1,9 @@
+Bozo,10,7,elf
+Loki,10,8,elf
+Pennywise,10,8,human
+Sideshow,10,6,elf
+Norman,10,8,human
+Cruella,10,7,dwarf
+Bellatrix,10,8,orc
+Maleficent,10,7,elf
+Joker,10,10,human
