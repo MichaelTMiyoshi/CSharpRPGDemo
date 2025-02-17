@@ -17,4 +17,8 @@ I have used branches this way to demonstrate how you might progress through a pr
 
 The way you look at the code for the different branches is to click on the button above the list of files that says Master.  Or at least it ought to.  That will show you the different branches.  Then, you can look to see different phases of the small project.
 
+By the way...  If you decide that you would like to fork the repo, make sure that you fork all the branches too.  I think there is a check box in Visual Studio for that.  I am not sure how to make sure to do that in other IDEs.
+
+Have fun.  Learn lots.  Remember, if you just copy and paste, you will get good at copying and pasting.  If you actually write code, even somebody else's code, you will get better at coding.  Of course, you will really start to take off when you write code that is completely your own.
+
 Note:  This is not the way professionals use branching in projects.  Normally (from what I have had explained to me), you would check out a branch.  Work on it.  Test it.  Then, when it was ready, you would merge the branch back into the master or main branch.
