@@ -12,6 +12,7 @@ Functions | Added functions for the different rooms and fighting
 enumAndClasses | Added an enum and some two classes so that it is object oriented
 Lists | Uses lists for the Non-Player Characters (NPCs) and their names
 Files | Reads the NPC data from a file and writes if the user chooses
+InheritancePolymorphism | A simple example of inheritance.  NPC is a child class of Player.
 
 I have used branches this way to demonstrate how you might progress through a project that starts small and builds.  Notice that at one point I had three Random Number Generators.  Then, I made it only in one class, but made it accessible to the other classes.  This makes it so that the random numbers are more random instead of less.
 
